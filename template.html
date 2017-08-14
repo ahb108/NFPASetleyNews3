@@ -1,0 +1,462 @@
+<link rel="stylesheet" href="/static/css/ol.css" type="text/css">
+<link rel="stylesheet" href="/static/vendor/fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+<script src="/static/js/ol.js" type="text/javascript"></script>
+<script src="/static/js/vendor/jquery.serializeJSON.min.js" type="text/javascript"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.0/jquery.cookie.min.js" type="text/javascript"></script>
+<script src="/static/vendor/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/ui/1.8.1/jquery-ui.min.js" type="text/javascript"></script>
+
+<style type="text/css">
+    .ui-autocomplete {
+    background-color: white;
+    width: 300px;
+    border: 1px solid #cfcfcf;
+    list-style-type: none;
+    padding-left: 0px;
+    }
+    label {
+        font-size:16px;
+    }
+    #map_canvas label {
+        width: auto;
+        display: inline;
+    }
+    #map_canvas img {
+        max-width: none;
+    }
+    #imgContainer {
+        height: 390px;
+        width: 600px;
+    } 
+    #map {
+        height: 400px;
+        width: 100%;
+    }
+</style>
+
+<div id="survey" class="modal fade" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Do you want to help us further?</h4>
+      </div>
+      <div class="modal-body">
+          <p>
+              Thank you for contributing one task for the project. 
+              We are interested in knowing how you found out about us.
+          </p>
+          <p>
+              Could you please answer two questions in a short survey?
+          </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Skip</button>
+        <a class="btn btn-large btn-success" href="https://docs.google.com/forms/d/1VtlhpPmo4CFbCHUJ0L_aX6K31IyTGrX6okR7pV80Rnc/viewform?embedded=true">Of course! Take me to the survey!</a>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div id="survey25" class="modal fade" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">
+            Congratulations! You have completed 25 tasks!
+        </h4>
+      </div>
+      <div class="modal-body">
+          <p>
+              Thank you for contributing 25 tasks for the project. Now that you 
+              have been using MicroPasts for a while, we would like to know how 
+              you found it.
+          </p>
+          <p>
+              Could you please answer a few questions in a short survey?
+          </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Skip</button>
+        <a class="btn btn-large btn-success" href="https://docs.google.com/forms/d/1hPo2IEP0BZJccVlA2OduW3DG987GBSVwB7y-ilEL5vg/viewform?embedded=true">Of course! Take me to the survey!</a>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div style="display:none;margin-top:15px; height:500px;" id="oldbrowser" class="row">
+    <!-- Success and Error Messages for the user -->
+    <div  class="col-md-8 col-md-offset-1 alert alert-info">
+        <h2>
+            Browser problems!
+        </h2>
+        <p>
+            Sorry, but your browser does not support the current application. 
+            If you want to contribute, please, upgrade to a modern web browser 
+            like the open source and free alternative 
+            <a href="http://www.mozilla.org/en-US/firefox/new/">Firefox</a> or 
+            <a href="https://www.google.com/intl/en/chrome/browser/">Chrome</a>.
+        </p>
+    </div>
+</div> 
+<!-- End of Row -->
+
+<div style="margin-top:15px;">
+    <div id="success" class="alert alert-success" style="display:none;">
+        <strong>Well done!</strong> You have successfully submitted your task. Here is another to try if you wish!
+    </div>
+    <div id="loading" class="alert alert-info" style="display:none;">
+        <img src="/static/img/loading.gif">Loading next task...
+    </div>
+    <div id="taskcompleted" class="alert alert-info" style="display:none;">
+        <strong>The task has been completed!</strong> Thanks a lot!
+    </div>
+    <div id="finish" class="alert alert-success" style="display:none;">
+        <h2>
+            Congratulations!
+        </h2> 
+        <p>
+            You have participated in <strong>all</strong> available tasks! Thank you for your interest and help.
+        </p>
+        <br/>
+        <img src="https://crowdfunded.micropasts.org/assets/logo-head.png" width="200" height="200"/>
+        <div class="alert-actions">
+            <a class="btn-default btn" href="/">Go back</a>
+            <a class="btn-default btn" href="/app">or, Check other applications</a>
+        </div>
+    </div>
+
+    <div id="error" class="alert alert-error" style="display:none;">
+        <a class="close">X.</a>
+        <strong>Error!</strong> Something went wrong, please contact the site 
+        administrators via the forum, Twitter, email or our Facebook page.
+    </div>
+</div> <!-- End Success and Error Messages for the user -->
+
+
+<!--
+    Task DOM for loading the Flickr Images
+    It uses the class="skeleton" to identify the elements that belong to the
+    task.
+-->
+
+<!-- Start Skeleton Row-->
+<div class="row skeleton"> 
+
+        <h1 id="start">
+            Please transcribe and translate this page of a German POW newsletter
+        </h1> 
+    
+    <!-- The question will be loaded here -->
+    
+    <span class="label label-info">Note</span> You can use your mouse wheel track-pad to zoom in/out the picture, as well as drag & drop to navigate in the document.
+
+</div>
+
+<!-- Start of Question and Submission DIV (column) -->
+<div class="row skeleton">
+
+    <div id="questions" class="col-md-4">
+        <!-- If the user clicks this button, the saved answer will be value="yes"-->
+        <form id="trans" role="form">        
+            <!-- Translation --> 
+            <div class="form-group">
+                <label class="control-label" for="translation">Page Translation</label>
+                <textarea class="form-control" rows="10" name="translation" placeholder="Please translate the text to English."></textarea>
+            </div>
+            <!-- Translator's comments --> 
+            <div class="form-group">
+                <label class="control-label" for="other">Translator's Comments</label>
+                <textarea class="form-control" rows="5" name="other" placeholder="Add here your comments, if you have any."></textarea>
+            </div>    
+        </form>
+        <button class="btn btn-info btn-answer" value='Yes'>Submit the task</button>
+            
+        <!-- Feedback items for the user -->
+        <p>You are working now on task: <span id="task-id" class="label label-warning">#</span></p>
+        <p>
+        You have completed: <span id="done" class="label label-info"></span> tasks from
+        <!-- Progress bar for the user -->
+        <span id="total" class="label label-inverse"></span></p>
+        <div class="progress progress-striped">
+            <div id="progress" rel="tooltip" title="#" class="progress-bar" role="progressbar" style="width: 0%;"></div>
+        </div>
+    <!-- End of feedback row -->
+
+    </div>
+    <!-- End of Question and Submission DIV (column) -->
+    
+    <!-- The column holding the open layers div -->    
+    <div id="photo-link" class="col-md-7 col-md-offset-1">
+        <!-- Start of Photo DIV (column) -->
+        <div id="imgHolder">
+            <div class="btn-group">
+                <a class="btn btn-info btn-sm" href="#" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-eye-open"></i> Tutorial</a>
+                <a class="btn btn-info btn-sm" id="imgLink" target="_blank" data-toggle="tooltip" data-placement="top" title="Opens in a new window" href="http://community.micropasts.org/category/crowdsourcing-support"><i class="glyphicon glyphicon-book"></i> Community Help</a>
+                <a id="raw" href="" class="btn btn-sm btn-info fancybox"><i class="glyphicon glyphicon-picture"></i> Overlay</a>
+                <a id="flickr" rel="tooltip" target="_blank" data-toggle="tooltip" data-placement="top" title="Opens in a new window" href="" class="btn btn-sm btn-info"><i class="icon icon-flickr"></i> View on flickr</a><!--  --><!-- https://www.flickr.com/photos/130806234@N04/sets/72157649954901537 -->
+                <a id="down" rel="tooltip" data-toggle="tooltip" data-placement="top" title="Only works for compliant browsers" download="" href="" class="btn btn-sm btn-info" ><i class="glyphicon glyphicon-download"></i> Download</a>
+            </div>
+            <!-- The container for the zoomer --> 
+            <div id="imgContainer"></div>
+            <div id="taskImg"></div>
+        </div><!-- End of Photo DIV (columnt) -->
+    </div>
+
+</div><!-- End of Skeleton Row -->
+
+<!-- Modal start -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <!-- Modal header --> 
+            <div class="modal-header">
+                <h3 class="lead">New Forest Setley Plain POW Camp 65 Newspaper translation tutorial</h3>
+            </div>
+            <div id="0" class="modal-body" style="display:none">
+                <p>
+                This application is for contributors with good German language skills and asks you to translate a page from a newsletter written by German POWs at the Setley Plain camp, New Forest. 
+                The platform will load a scanned page (stored on the New Forest Park Authority's <a href="https://www.flickr.com/photos/newforestheritage/">Flickr</a> stream). 
+                Once the image has been loaded, you will be asked to translate the contents of the page. An example portion of a newsletter's page is provided below:
+                </p>
+                <img src="http://micropasts.org/wp-content/uploads/2015/01/POW_Sample_Tutorial.png" class="img-polaroid" alt="An example of one of the POW newsletter pages" width="75%" height="75%"/>
+            </div>
+            <div id="1" class="modal-body" style="display:none">
+                <p>
+                Some further bits of guidance as you translate:
+                <ul>    
+                	<li>Please translate this document only if you are reasonably fluent in German - do not use Google Translate.</li>
+                    <li>Please translate the text as accurately as possible, following the original punctuation as much as possible.</li>   
+                    <li>For special characters, you may insert them as they appear, or as the right equivalent of characters representing them. For example, the name Müller can be transcribed as 'Müller' (with the original Umlaut) or as 'Mueller' (With 'ue' replacing the Umlaut).</li>
+                    <li>If a word is hard to decipher, do your best to identify it and make a comment to note the problem.</li>
+                </ul>            
+                </p>
+                <p>
+                During the translation, you can always return to this tutorial via the "Tutorial" button.
+                </p>
+                <p>
+                To find out how the project is progressing, suggest changes to this application or
+                propose new research ideas based what you have transcribed and translated, please have a look at our <a href="http://community.micropasts.org" title="Community forum">community forum</a>.
+                </p>       
+            </div>
+        <!-- End of stepped modal body -->
+
+        <!-- Modal footer -->
+            <div class="modal-footer">
+                <a id="prevBtn" href="#" onclick="showStep('prev')" class="btn btn-default">Previous</a>
+                <a id="nextBtn" href="#" onclick="showStep('next')" class="btn btn-success">Next</a>
+                <button id="startContrib" data-dismiss="modal" class="btn btn-primary" style="display:none"><i class="glyphicon glyphicon-thumbs-up"></i> Let's start!</a>
+            </div>
+    </div>
+  </div>
+</div>
+<!-- Modal end --> 
+
+<script>
+var step = -1;
+function showStep(action) {
+    $("#" + step).hide();
+    if (action == 'next') {
+        step = step + 1;
+    }
+    if (action == 'prev') {
+        step = step - 1;
+    }
+    if (step == 0) {
+        $("#prevBtn").hide();
+    }
+    else {
+        $("#prevBtn").show();
+    }
+    if (step == 1) {
+        $("#nextBtn").hide();
+        $("#startContrib").show();
+    }
+    $("#" + step).show();
+}
+
+showStep('next');
+$("#modal").modal('show');
+</script>
+
+<!-- The modernizer script --> 
+<script>
+// Quick fix for IE8
+Modernizr.load({
+    test: window.JSON,
+    nope: '/static/js/vendor/json2.min.js'
+});
+</script>
+
+<!-- The main pybossa functions --> 
+<script>
+function loadUserProgress() {
+    pybossa.userProgress('NFPA-SetleyNews3').done(function(data){
+        console.log(data);
+        console.log("Total answers done for user: " + data.done);
+        if ((data.done == 1) && ($.cookie('surveyNFPOWnewsletters') === undefined)){
+           $("#survey").modal('show');
+           $.cookie('surveyNFPOWnewsletters', 'shown', { path: '/'});
+        }
+        if ((data.done == 25) && ($.cookie('survey25NFPOWnewsletters') === undefined)){
+           $("#survey25").modal('show');
+           $.cookie('survey25NFPOWnewsletters', 'shown', { path: '/'});
+        }
+        var pct = Math.round((data.done*100)/data.total);
+        $("#progress").css("width", pct.toString() +"%");
+        $("#progress").attr("title", pct.toString() + "% completed!");
+        $("#progress").tooltip({'placement': 'left'});
+        $("#total").text(data.total);
+        $("#done").text(data.done);
+    });
+}
+</script>
+
+<script>
+pybossa.taskLoaded(function(task, deferred) {
+    if ( !$.isEmptyObject(task) ) {
+        var img = $('<img />');
+        var div_map = $('<div/>');
+        
+        div_map.css("height", "390px");
+        div_map.css("width", "600px");
+        div_map.css("background", "#000");
+
+        var copyright = "&copy; <a href='http://www.newforestnpa.gov.uk'>New Forest National Park Authority 2015</a>";
+
+        var extent = new OpenLayers.Bounds();
+        extent.extend(new OpenLayers.LonLat(1.758939,58.672231).transform(new OpenLayers.Projection("EPSG:4326"),
+        new OpenLayers.Projection('EPSG:900913')));
+        
+        extent.extend(new OpenLayers.LonLat(-6.99745,49.96112).transform(new OpenLayers.Projection("EPSG:4326"),
+        new OpenLayers.Projection('EPSG:900913')));
+
+        $("#imgContainer").append(div_map);
+        div_map.attr("id", "img_" + task.id);
+
+        task.pixelProjection = new ol.proj.Projection({
+          code: 'pixel',
+          units: 'pixels',
+          extent: [0, 0, 1021, 1560]
+        });
+
+        task.map_img = new ol.Map({
+            //interactions: ol.interaction.defaults().extend([task.select, task.modify]),
+            layers: [
+            new ol.layer.Image({
+              source: new ol.source.ImageStatic({
+                attributions: [
+                  new ol.Attribution({
+                    html: copyright
+                  })
+                ],
+                url: task.info.url_b,
+                imageSize: [1021, 1560],
+                projection: task.pixelProjection,
+                imageExtent: task.pixelProjection.getExtent()
+              })
+            })
+          ],
+          renderer: 'canvas',
+          target: 'img_' + task.id,
+          view: new ol.View({
+            projection: task.pixelProjection,
+            center: ol.extent.getCenter(task.pixelProjection.getExtent()),
+            zoom: 1.0
+          })
+        });
+        div_map.css("display", "none");
+
+        // load image from flickr
+        var img = $('<img />');
+        img.attr("id", "img_task_" + task.id);
+        img.load(function() {
+            // continue as soon as the image is loaded
+            deferred.resolve(task);
+        });
+        img.attr('src', task.info.url_b);
+        img.attr('width', '600px');
+        img.attr('height', '390px');
+        img.addClass('img-polaroid');
+        img.css("cursor", "zoom-in");
+        task.info.image = img;
+
+    }  else {
+        deferred.resolve(task);
+    }
+});
+</script>
+
+<script>
+pybossa.presentTask(function(task, deferred) {
+    if ( !$.isEmptyObject(task) ) {
+        loadUserProgress();
+        $(':input','#trans')
+           .not(':button, :submit, :reset, :hidden, :radio')
+           .val('')
+           .removeAttr('checked')
+           .removeAttr('selected');
+      
+      	$("a#raw").attr("href", task.info.url_b);
+	$("a#flickr").attr("href", task.info.link + '/sizes/k/');
+	$("a#down").attr("download", task.id);
+	$("a#down").attr("href", task.info.url_b );
+        $(".fancybox").fancybox();
+        $("[rel=tooltip]").tooltip();
+        $("#question").html(task.info.question);
+        $('#task-id').html(task.id);
+        $("#img_" + task.id).show();
+
+        $('.btn-answer').off('click').on('click', function(evt) {
+            evt.preventDefault();
+            var answer = $(evt.target).attr("value");
+            if (typeof answer !== 'undefined') {
+                console.log(answer);
+                if (answer === 'search') {
+                    $("#searching").show();
+                    search(task, $("#toSearch").val(), 15);
+                } else {
+                    task.answer = $("#trans").serializeJSON();
+                    console.log(task.answer);
+                    pybossa.saveTask(task.id, task.answer).done(function() {
+                        $("#img_" + task.id).hide();
+                        $("html, body").animate({ scrollTop: 0 }, "slow");
+                        $("#success").fadeIn(500).fadeOut(5500);
+                        $("#loading").fadeIn(500).fadeOut(1000);
+                        deferred.resolve();
+                    });
+                    $("#loading").fadeIn(500);
+                    
+                }
+            } else {
+                console.log(answer);
+                console.log(typeof(answer));
+                $("#error").show();
+            }
+        });
+        $("#loading").hide();
+    }
+    else {
+        $(".skeleton").hide();
+        $("#loading").hide();
+        $("#finish").fadeIn(500);
+    }
+});
+
+if(Modernizr.borderradius) {
+    pybossa.run('NFPA-SetleyNews3');
+}
+else {
+    $(".skeleton").hide();
+    $("#oldbrowser").show();
+}
+
+$(window).off('.affix');
+$("#imgHolder")
+    .removeClass("affix affix-top affix-bottom")
+    .removeData("bs.affix");
+</script>
