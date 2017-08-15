@@ -295,7 +295,7 @@ Modernizr.load({
 <!-- The main pybossa functions --> 
 <script>
 function loadUserProgress() {
-    pybossa.userProgress('NFPA-SetleyNews3').done(function(data){
+    pybossa.userProgress('NFPASetleyNews3').done(function(data){
         console.log(data);
         console.log("Total answers done for user: " + data.done);
         if ((data.done == 1) && ($.cookie('surveyNFPOWnewsletters') === undefined)){
@@ -448,7 +448,7 @@ pybossa.presentTask(function(task, deferred) {
 });
 
 if(Modernizr.borderradius) {
-    pybossa.run('NFPA-SetleyNews3');
+    pybossa.run('NFPASetleyNews3');
 }
 else {
     $(".skeleton").hide();
