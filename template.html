@@ -276,22 +276,17 @@ Modernizr.load({
 <script>
 pybossa.presentTask(function(task, deferred) {
     if ( !$.isEmptyObject(task) ) {
-        loadUserProgress();
-        $(':input','#trans')
-           .not(':button, :submit, :reset, :hidden, :radio')
-           .val('')
-           .removeAttr('checked')
-           .removeAttr('selected');
-      
-      	$("a#raw").attr("href", task.info.url_b);
-	$("a#flickr").attr("href", task.info.link + '/sizes/k/');
-	$("a#down").attr("download", task.id);
-	$("a#down").attr("href", task.info.url_b );
-        $(".fancybox").fancybox();
-        $("[rel=tooltip]").tooltip();
-        $("#question").html(task.info.question);
-        $('#task-id').html(task.id);
-        $("#img_" + task.id).show();
+            loadUserProgress();
+            console.log(task);
+            $('#photo-link').html('').append(task.info.image);
+            $('#task-id').html(task.id);
+            $("a#raw").attr("href", task.info.url_b);
+            $("a#flickr").attr("href", task.info.link + '/sizes/k/');
+            $("a#down").attr("download", task.id);
+            $("a#down").attr("href", task.info.url_b );
+            $(".fancybox").fancybox();
+            $('#imgLink').tooltip();
+            $("[rel=tooltip]").tooltip();
 
         $('.btn-answer').off('click').on('click', function(evt) {
             evt.preventDefault();
