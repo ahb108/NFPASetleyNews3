@@ -1,8 +1,5 @@
-<link rel="stylesheet" href="/static/css/ol.css" type="text/css">
 <link rel="stylesheet" href="/static/vendor/fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
-<script src="/static/js/ol.js" type="text/javascript"></script>
 <script src="/static/js/vendor/jquery.serializeJSON.min.js" type="text/javascript"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.0/jquery.cookie.min.js" type="text/javascript"></script>
 <script src="/static/vendor/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
 <script src="https://code.jquery.com/ui/1.8.1/jquery-ui.min.js" type="text/javascript"></script>
@@ -70,7 +67,7 @@
             You have participated in <strong>all</strong> available tasks! Thank you for your interest and help.
         </p>
         <br/>
-        <img src="https://crowdfunded.micropasts.org/assets/logo-head.png" width="200" height="200"/>
+        <img src="http://crowdsourced.micropasts.org/static/img/MP_SQUARE_notype.png" width="200" height="200"/>
         <div class="alert-actions">
             <a class="btn-default btn" href="/">Go back</a>
             <a class="btn-default btn" href="/app">or, Check other applications</a>
@@ -139,19 +136,13 @@
     
     <!-- The column holding the open layers div -->    
     <div id="photo-link" class="col-md-7 col-md-offset-1">
-        <!-- Start of Photo DIV (column) -->
-        <div id="imgHolder">
-            <div class="btn-group">
-                <a class="btn btn-info btn-sm" href="#" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-eye-open"></i> Tutorial</a>
-                <a class="btn btn-info btn-sm" id="imgLink" target="_blank" data-toggle="tooltip" data-placement="top" title="Opens in a new window" href="http://community.micropasts.org/category/crowdsourcing-support"><i class="glyphicon glyphicon-book"></i> Community Help</a>
-                <a id="raw" href="" class="btn btn-sm btn-info fancybox"><i class="glyphicon glyphicon-picture"></i> Overlay</a>
-                <a id="flickr" rel="tooltip" target="_blank" data-toggle="tooltip" data-placement="top" title="Opens in a new window" href="" class="btn btn-sm btn-info"><i class="icon icon-flickr"></i> View on flickr</a><!--  --><!-- https://www.flickr.com/photos/130806234@N04/sets/72157649954901537 -->
-                <a id="down" rel="tooltip" data-toggle="tooltip" data-placement="top" title="Only works for compliant browsers" download="" href="" class="btn btn-sm btn-info" ><i class="glyphicon glyphicon-download"></i> Download</a>
+        <!-- Start of Photograph div (column) -->
+            <div id="imgContainer">
+             <span id="photo-link">
+                <img id="photo" src="/static/img/loading.gif" class="loadingIcon">
+             </span>
             </div>
-            <!-- The container for the zoomer --> 
-            <div id="imgContainer"></div>
-            <div id="taskImg"></div>
-        </div><!-- End of Photo DIV (columnt) -->
+        <!-- End of Photograph div (column) -->
     </div>
 
 </div><!-- End of Skeleton Row -->
