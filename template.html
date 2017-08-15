@@ -35,59 +35,6 @@
     }
 </style>
 
-<div id="survey" class="modal fade" data-backdrop="static">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Do you want to help us further?</h4>
-      </div>
-      <div class="modal-body">
-          <p>
-              Thank you for contributing one task for the project. 
-              We are interested in knowing how you found out about us.
-          </p>
-          <p>
-              Could you please answer two questions in a short survey?
-          </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Skip</button>
-        <a class="btn btn-large btn-success" href="https://docs.google.com/forms/d/1VtlhpPmo4CFbCHUJ0L_aX6K31IyTGrX6okR7pV80Rnc/viewform?embedded=true">Of course! Take me to the survey!</a>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-
-<div id="survey25" class="modal fade" data-backdrop="static">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">
-            Congratulations! You have completed 25 tasks!
-        </h4>
-      </div>
-      <div class="modal-body">
-          <p>
-              Thank you for contributing 25 tasks for the project. Now that you 
-              have been using MicroPasts for a while, we would like to know how 
-              you found it.
-          </p>
-          <p>
-              Could you please answer a few questions in a short survey?
-          </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Skip</button>
-        <a class="btn btn-large btn-success" href="https://docs.google.com/forms/d/1hPo2IEP0BZJccVlA2OduW3DG987GBSVwB7y-ilEL5vg/viewform?embedded=true">Of course! Take me to the survey!</a>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-
 <div style="display:none;margin-top:15px; height:500px;" id="oldbrowser" class="row">
     <!-- Success and Error Messages for the user -->
     <div  class="col-md-8 col-md-offset-1 alert alert-info">
@@ -283,113 +230,57 @@ showStep('next');
 $("#modal").modal('show');
 </script>
 
-<!-- The modernizer script --> 
-<script>
+<!-- Client side scripts -->
+<script type="text/javascript ">
 // Quick fix for IE8
 Modernizr.load({
-    test: window.JSON,
-    nope: '/static/js/vendor/json2.min.js'
+  test: window.JSON,
+  nope: '/static/js/vendor/json2.min.js'
 });
+</script>
+
+<script type="text/javascript">
+    $(window).resize(function(){
+        console.log('Window resized');
+    });
 </script>
 
 <!-- The main pybossa functions --> 
-<script>
-function loadUserProgress() {
-    pybossa.userProgress('NFPASetleyNews3').done(function(data){
-        console.log(data);
-        console.log("Total answers done for user: " + data.done);
-        if ((data.done == 1) && ($.cookie('surveyNFPOWnewsletters') === undefined)){
-           $("#survey").modal('show');
-           $.cookie('surveyNFPOWnewsletters', 'shown', { path: '/'});
-        }
-        if ((data.done == 25) && ($.cookie('survey25NFPOWnewsletters') === undefined)){
-           $("#survey25").modal('show');
-           $.cookie('survey25NFPOWnewsletters', 'shown', { path: '/'});
-        }
-        var pct = Math.round((data.done*100)/data.total);
-        $("#progress").css("width", pct.toString() +"%");
-        $("#progress").attr("title", pct.toString() + "% completed!");
-        $("#progress").tooltip({'placement': 'left'});
-        $("#total").text(data.total);
-        $("#done").text(data.done);
-    });
-}
-</script>
 
-<script>
-pybossa.taskLoaded(function(task, deferred) {
-    if ( !$.isEmptyObject(task) ) {
-        var img = $('<img />');
-        var div_map = $('<div/>');
-        
-        div_map.css("height", "390px");
-        div_map.css("width", "600px");
-        div_map.css("background", "#000");
-
-        var copyright = "&copy; <a href='http://www.newforestnpa.gov.uk'>New Forest National Park Authority 2015</a>";
-
-        var extent = new OpenLayers.Bounds();
-        extent.extend(new OpenLayers.LonLat(1.758939,58.672231).transform(new OpenLayers.Projection("EPSG:4326"),
-        new OpenLayers.Projection('EPSG:900913')));
-        
-        extent.extend(new OpenLayers.LonLat(-6.99745,49.96112).transform(new OpenLayers.Projection("EPSG:4326"),
-        new OpenLayers.Projection('EPSG:900913')));
-
-        $("#imgContainer").append(div_map);
-        div_map.attr("id", "img_" + task.id);
-
-        task.pixelProjection = new ol.proj.Projection({
-          code: 'pixel',
-          units: 'pixels',
-          extent: [0, 0, 1021, 1560]
+<!-- Load user progress -->
+<script type="text/javascript">
+    function loadUserProgress() {
+        pybossa.userProgress('qasrIbrim').done(function(data){
+            console.log("Total answers done for user: " + data.done);
+            var pct = Math.round((data.done*100)/data.total);
+            $("#progress").css("width", pct.toString() +"%");
+            $("#progress").attr("title", pct.toString() + "% completed!");
+            $("#progress").tooltip({'placement': 'left'});
+            $("#total").text(data.total);
+            $("#done").text(data.done);
         });
-
-        task.map_img = new ol.Map({
-            //interactions: ol.interaction.defaults().extend([task.select, task.modify]),
-            layers: [
-            new ol.layer.Image({
-              source: new ol.source.ImageStatic({
-                attributions: [
-                  new ol.Attribution({
-                    html: copyright
-                  })
-                ],
-                url: task.info.url_b,
-                imageSize: [1021, 1560],
-                projection: task.pixelProjection,
-                imageExtent: task.pixelProjection.getExtent()
-              })
-            })
-          ],
-          renderer: 'canvas',
-          target: 'img_' + task.id,
-          view: new ol.View({
-            projection: task.pixelProjection,
-            center: ol.extent.getCenter(task.pixelProjection.getExtent()),
-            zoom: 1.0
-          })
-        });
-        div_map.css("display", "none");
-
-        // load image from flickr
-        var img = $('<img />');
-        img.attr("id", "img_task_" + task.id);
-        img.load(function() {
-            // continue as soon as the image is loaded
-            deferred.resolve(task);
-        });
-        img.attr('src', task.info.url_b);
-        img.attr('width', '600px');
-        img.attr('height', '390px');
-        img.addClass('img-polaroid');
-        img.css("cursor", "zoom-in");
-        task.info.image = img;
-
-    }  else {
-        deferred.resolve(task);
     }
-});
 </script>
+
+<script type="text/javascript">
+    pybossa.taskLoaded(function(task, deferred) {
+        if ( ! $.isEmptyObject(task) ) {
+          var img = $('<img width="100%" style="height:auto;" />');
+            img.load(function() {
+                deferred.resolve(task);
+                $("#status").text("Photo loaded!");
+            });
+            img.attr('src', task.info.url_b);
+            img.addClass('img-polaroid');
+            task.info.image = img;
+            console.log('Task ID: ' + task.id);
+        }
+        else {
+            deferred.resolve(task);
+        }
+    });
+</script>
+
 
 <script>
 pybossa.presentTask(function(task, deferred) {
@@ -460,3 +351,8 @@ $("#imgHolder")
     .removeClass("affix affix-top affix-bottom")
     .removeData("bs.affix");
 </script>
+
+<!-- NEW CODE -->
+
+
+
